@@ -1,10 +1,46 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/home-view">Home /
+    </router-link> 
+    <router-link
+    v-if="this.$store.state.isAuthenticated==false"
+     to="/sign-up">
+     Sign Up /
+    </router-link> 
+    <router-link
+    v-if="this.$store.state.isAuthenticated==false"
+     to="/log-in">
+     Log In /
+    </router-link> 
+
+    <router-link
+    v-if="this.$store.state.isAuthenticated"
+     to="/log-out">
+     Log Out /
+      </router-link> 
   </nav>
   <router-view/>
 </template>
+
+<script>
+
+import axios from 'axios'
+
+export default {
+  beforeCreate(){
+    this.$store.commit('initializeStore')
+
+    const token = this.$store.state.token
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = 'Token '+ token
+      
+    } else{
+      axios.defaults.headers.common['Authorization'] = ''
+    }
+  }
+}
+
+</script>
 
 <style lang="scss">
 #app {
